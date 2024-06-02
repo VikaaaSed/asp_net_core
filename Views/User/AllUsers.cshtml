@@ -1,0 +1,36 @@
+﻿@model IEnumerable<User>
+@{
+    ViewData["Title"] = "Пользователи";
+}
+<div class="text-center">
+    <h1 class="display-4">Все зарегистрированные пользоваатели</h1>
+</div>
+
+<table class="table table table-hover border-primary">
+    <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">логин</th>
+            <th scope="col">пароль</th>
+            <th scope="col">ФИО</th>
+            <th scope="col">Фамилия</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Отчество</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            string[] FIO = user.FIO.Split(' ');
+            <tr>
+                <td scope="row">@user.Id</td>
+                <td scope="row">@user.Login</td>
+                <td scope="row">@user.Password</td>
+                <td scope="row">@user.FIO</td>
+                <td scope="row">@(FIO[0])</td>
+                <td scope="row">@(FIO.Length > 1 ? FIO[1] : "Нет")</td>
+                <td scope="row">@(FIO.Length > 2 ? FIO[2] : "Нет")</td>
+            </tr>
+        }
+    </tbody>
+</table>

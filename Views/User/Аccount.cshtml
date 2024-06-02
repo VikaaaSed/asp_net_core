@@ -1,0 +1,116 @@
+﻿@{
+    ViewData["Title"] = "Личная страница";
+}
+@model IEnumerable<MessageModel>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<div class="text-center">
+    <h1 class="display-4">Добро пожаловать @ViewData["name"]</h1>
+</div>
+
+<div class="d-flex align-items-start">
+    <div class="nav flex-column nav-tabs me-3" id="nav-tab" role="tablist" aria-orientation="vertical">
+        <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Входящие</button>
+        <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Написать сообщение</button>
+    </div>
+    <div class="tab-content" id="v-pills-tabContent">
+        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+            <h5>Входящие сообщения</h5>
+            <table class="table table table-hover border-primary">
+                <label class="control-label">Фильтры</label>
+                <div class="d-flex justify-content-evenly">
+
+                    <form method="get" asp-action="Аccount" asp-controller="User">
+                        <div>
+                            <label class="control-label">Новые сообщения</label>
+                            <input type="checkbox" name="Status" />
+                        </div>
+                        <button type="submit">Применить</button>
+                    </form>
+                </div>
+                <thead>
+                    <tr>
+                        <th>
+                            <a asp-action="Аccount" asp-controller="User" asp-route-filterVM.SenderSort="@ViewBag.SenderSort">Отправитель</a>
+                        </th>
+                        <th>
+                            <a asp-action="Аccount" asp-controller="User" asp-route-filterVM.HedderSort="@ViewBag.HeddrSort">Тема</a>
+                            </th>
+                        <th>Статус</th>
+                        <th>
+                            <a asp-action="Аccount" asp-controller="User" asp-route-filterVM.DateSort="@ViewBag.DataSort">Дата</a>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{
+                        int count = 0;
+                        @foreach (var mes in Model)
+                        {
+                            count++;
+                            <tr class="@(mes.Status == true ? "seen-true" : "seen-false")">
+                                <td scope="row">
+                                    <a href="#" data-id="@mes.Id" onClick='alert("@mes.TextMessage")'>@mes.Sender</a>
+                                </td>
+                                <td scope="row">@mes.Hedder</td>
+                                <td scope="row">@(mes.Status == true ? "Новое" : "Прочитанное")</td>
+                                <td scope="row">@mes.Date</td>
+                            </tr>
+                        }
+                        if (count == 0)
+                        {
+                            ViewData["Count_Mess"] = "Пусто >:^(";
+                        }
+                        else
+                        {
+                            ViewData["Count_Mess"] = "";
+                        }
+                    }
+                </tbody>
+                </table>
+            <h6>@ViewData["Count_Mess"]</h6>
+        </div>
+        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+            <h5>Написать сообщение</h5>
+            
+            <div>
+                <form method="post" asp-action="Аccount" asp-controller="User">
+                    <label class="control-label">Кому:</label>
+                    <input class="form-control" name="Recipient" />
+                    <br />
+                    <label class="control-label">Заголовок:</label>
+                    <input class="form-control" name="Hedder" />
+                    <br />
+                    <label class="control-label">Текст:</label>
+                    <textarea class="form-control" name="TextMessage"></textarea>
+                    <br/>
+                    <button type="submit">Отправить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        let unreadLines = document.querySelectorAll(".seen-false");
+        for (let i = 0; i < unreadLines.length; i++) {
+            unreadLines[i].style.background = '#0000';
+        }
+
+        let readLines = document.querySelectorAll(".seen-true");
+        for (let i = 0; i < readLines.length; i++) {
+            readLines[i].style.background = 'green';
+        }
+
+        $('table tbody a').click(function (e) {
+            e.preventDefault();
+            var messageId = $(this).attr('data-id');
+            console.log(messageId);
+            $.post('/User/MarkAsRead/' + messageId, function () {
+                $(this).closest('tr').removeClass('seen-false').addClass('seen-true').css('background-color', 'white');
+            }.bind(this));
+        });
+    });
+</script>

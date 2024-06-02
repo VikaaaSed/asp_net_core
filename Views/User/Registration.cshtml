@@ -1,0 +1,27 @@
+﻿@model C_Sharp_lab_4.Models.RegistModel
+@{
+    ViewData["Title"] = "Регистрация";
+}
+<div class="text-center">
+    <h1 class="display-4">Регистрация</h1>
+    <div class=" @(ViewData["Registration_Error"] != null ? "alert alert-danger" : "collapse")">
+        <strong>Ошибка</strong> @ViewData["Registration_Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+<form asp-action="Registration">
+    <div class="form-group">
+        <label class="control-label">ФИО</label>
+        <input asp-for="FIO" class="form-control" />
+        <label class="control-label">Логин</label>
+        <input asp-for="Login" class="form-control" />
+        <label class="control-label">Пароль</label>
+        <input asp-for="Password" type="password" class="form-control" />
+        <label class="control-label">Повторение пароля</label>
+        <input asp-for="AcceptPassword" type="password" class="form-control" />
+    </div>
+    <div class="form-group mt-4">
+        <input type="submit" asp-action="Registration" value="Зарегистрироваться" class="btn btn-primary"/>
+        <input type="submit" asp-action="Login" value="Перейти к авторизации" class="btn btn-primary" />
+    </div>
+</form>

@@ -1,0 +1,25 @@
+﻿@model C_Sharp_lab_4.Models.User
+@{
+    ViewData["Title"] = "Авторизация";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Авторизация</h1>
+    <div class=" @(ViewData["Аuthorization_Error"] != null ? "alert alert-danger" : "collapse")">
+        <strong>Ошибка</strong> @ViewData["Аuthorization_Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+<form asp-action="Login">
+    <div class="form-group">
+        <label class="control-label">Логин</label>
+        <input asp-for="Login" class="form-control" />
+        <label class="control-label">Пароль</label>
+        <input asp-for="Password" type="password" class="form-control" />
+
+    </div>
+    <div class="form-group mt-4">
+        <input type="submit" value="Вход" class="btn btn-primary" />
+        <input type="submit" asp-action="Registration" value="Регистрация" class="btn btn-primary" />
+    </div>
+</form>
